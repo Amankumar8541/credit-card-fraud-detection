@@ -1,84 +1,156 @@
+# 🛡️ FraudGuard – Credit Card Fraud Detection System
 
-# Credit Card Fraud Detection System 🛡️
+An ML-powered platform to identify suspicious credit card transactions using Logistic Regression.
 
-An ML-powered Suspicious Transaction Detection Platform that
-classifies credit card transactions as Fraudulent or Legitimate.
+🔗 **Live Demo:** https://credit-card-fraud-detection-pjpvqnn3goslg2yotacb7.streamlit.app/
 
-## Project Overview
+---
 
-This project uses Machine Learning to identify potentially
-fraudulent credit card transactions using historical transaction data.
+## 📌 Project Overview
 
-## Features
+FraudGuard is a machine learning-based web application designed to detect potentially fraudulent credit card transactions.
 
-- Credit card fraud classification
-- Fraud probability prediction
-- Interactive Streamlit dashboard
-- Batch CSV transaction prediction
-- Model evaluation and performance metrics
-- Saved ML model using Joblib
+It uses a trained Logistic Regression model to classify transactions as **Fraudulent** or **Legitimate**.
 
-## Tech Stack
+The application provides an interactive dashboard where users can analyze individual transactions, upload transaction datasets, view prediction summaries, and download prediction reports.
 
-- Python
-- Pandas and NumPy
-- Scikit-learn
-- Logistic Regression
-- Streamlit
-- Joblib
-- Git and GitHub
+## ✨ Features
 
-## Dataset
+- 📊 Interactive dark-themed dashboard
+- 🔍 Individual transaction fraud detection
+- 📁 Upload custom transaction CSV files
+- ⚡ Batch transaction prediction
+- 📈 Fraud and legitimate transaction statistics
+- 📥 Download prediction reports
+- 📉 Model evaluation and confusion matrix
+- 📌 Precision, Recall, F1 Score and PR-AUC metrics
 
-ULB Credit Card Fraud Detection Dataset
+## 🛠️ Tech Stack
 
-https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+| Technology | Purpose |
+|---|---|
+| Python | Programming language |
+| Pandas | Data processing |
+| NumPy | Numerical operations |
+| Scikit-learn | Machine learning |
+| Logistic Regression | Classification model |
+| Joblib | Model persistence |
+| Streamlit | Web application |
+| Git & GitHub | Version control |
+| Streamlit Community Cloud | Deployment |
 
-Download creditcard.csv and place it inside the data folder.
+## 🤖 Machine Learning Model
 
-## Installation
+- Algorithm: Logistic Regression
+- Dataset: Credit Card Fraud Detection Dataset
+- Class imbalance handling: `class_weight="balanced"`
+- Feature scaling: StandardScaler
+- Model pipeline: Scikit-learn Pipeline
+
+## 📊 Model Performance
+
+| Metric | Score |
+|---|---:|
+| Precision | 6.10% |
+| Recall | 91.84% |
+| F1 Score | 11.44% |
+| PR-AUC | 0.7190 |
+
+The model achieves high recall, detecting most fraud cases in the test dataset. However, its precision is low, meaning it also flags many legitimate transactions as potentially fraudulent.
+
+### Confusion Matrix
+
+| | Predicted Legitimate | Predicted Fraud |
+|---|---:|---:|
+| Actual Legitimate | 55,478 | 1,386 |
+| Actual Fraud | 8 | 90 |
+
+## 📂 Project Structure
+
+```text
+Credit-Card-Fraud-Detection/
+│
+├── artifacts/
+│   ├── fraud_model.pkl
+│   ├── metrics.json
+│   └── demo_transactions.csv
+│
+├── data/
+│   └── creditcard.csv
+│
+├── app.py
+├── train.py
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+## 🚀 Run Locally
+
+### 1. Clone the repository
 
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd Credit-Card-Fraud-Detection
+git clone https://github.com/Amankuamr8541/credit-card-fraud-detection.git
+```
 
-python3 -m venv .venv
+### 2. Navigate to the project
+
+```bash
+cd credit-card-fraud-detection
+```
+
+### 3. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 4. Activate the environment
+
+Mac/Linux:
+
+```bash
 source .venv/bin/activate
+```
 
+### 5. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-## Train the Model
+### 6. Run the application
 
 ```bash
-python train.py
+python -m streamlit run app.py
 ```
 
-## Run the Application
+## 📁 Dataset
 
-```bash
-streamlit run app.py
-```
+Dataset: Credit Card Fraud Detection Dataset (ULB)
 
-## Project Architecture
+Source: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
-Dataset → Preprocessing → Model Training →
-Model Evaluation → Model Saving → Streamlit Dashboard
+The dataset contains anonymized transaction features, including Time, V1–V28, Amount, and Class.
 
-## MLOps Concepts
+**Note:** Batch prediction requires the same anonymized feature format. Ordinary bank statements or UPI transaction exports are not directly supported.
 
-- Reproducible model training
-- Model artifact management
-- Evaluation metrics
-- Batch inference
-- Git-based version control
+## ⚠️ Limitations
 
-## Important Note
+- This is an academic machine learning prototype.
+- It is not connected to live banking or payment systems.
+- Uploaded datasets are analyzed using the existing trained model; they do not automatically retrain it.
+- Predictions are not confirmed real-world fraud cases.
+- The model may generate false positives.
 
-This is an academic machine learning and MLOps prototype.
-It is not connected to a real banking system.
+## 👨‍💻 Author
 
-## Author
+**Aman Kumar Gupta**
 
-Your Name
-B.Tech Computer Science and Engineering
+B.Tech – Computer Science and Engineering
+
+GitHub: https://github.com/Amankumar8541
+
+---
+
+⭐ If you find this project interesting, consider giving it a star!
