@@ -6,12 +6,15 @@ import joblib
 import json
 from pathlib import Path
 
-# ---------------- PAGE CONFIGURATION ----------------
+# =========================================================
+# PAGE CONFIG
+# =========================================================
 
 st.set_page_config(
-    page_title="Credit Card Fraud Detection",
-    page_icon="💳",
-    layout="wide"
+    page_title="FraudGuard | Credit Card Security",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -26,7 +29,219 @@ FEATURE_COLUMNS = [
     "Amount"
 ]
 
-# ---------------- LOAD MODEL AND DATA ----------------
+# =========================================================
+# CUSTOM DARK FINTECH CSS
+# =========================================================
+
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .stApp {
+        background: #0b1020;
+        color: #e8edf7;
+    }
+
+    [data-testid="stHeader"] {
+        background: rgba(11, 16, 32, 0.9);
+    }
+
+    [data-testid="stSidebar"] {
+        background: #10182b;
+        border-right: 1px solid #26334d;
+    }
+
+    [data-testid="stSidebar"] * {
+        color: #e8edf7;
+    }
+
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+        max-width: 1500px;
+    }
+
+    .hero {
+        background: linear-gradient(120deg, #172641, #111a30);
+        border: 1px solid #293b5d;
+        border-radius: 18px;
+        padding: 26px 30px;
+        margin-bottom: 24px;
+    }
+
+    .hero-label {
+        color: #9db4d9;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .hero h1 {
+        color: #ffffff;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 8px 0;
+    }
+
+    .hero p {
+        color: #aab9d2;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 21px;
+        font-weight: 700;
+        color: #f1f5ff;
+        margin: 20px 0 14px 0;
+    }
+
+    .metric-card {
+        background: #141f35;
+        border: 1px solid #293954;
+        border-radius: 15px;
+        padding: 19px;
+        min-height: 118px;
+    }
+
+    .metric-label {
+        color: #9aabc7;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .metric-value {
+        color: #f5f7ff;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .metric-note {
+        color: #8093b2;
+        font-size: 11px;
+        margin-top: 5px;
+    }
+
+    .status-fraud {
+        background: #351b2a;
+        border: 1px solid #87364f;
+        color: #ff718b;
+        padding: 14px 17px;
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .status-safe {
+        background: #123329;
+        border: 1px solid #24684f;
+        color: #61dfa7;
+        padding: 14px 17px;
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .info-card {
+        background: #141f35;
+        border: 1px solid #293954;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 12px;
+    }
+
+    .muted {
+        color: #9aabc7;
+        font-size: 13px;
+    }
+
+    div.stButton > button {
+        background: #e84b62;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 10px 20px;
+        font-weight: 700;
+        min-height: 43px;
+    }
+
+    div.stButton > button:hover {
+        background: #ff6378;
+        color: white;
+        border: none;
+    }
+
+    div.stDownloadButton > button {
+        background: #1d3557;
+        color: white;
+        border: 1px solid #42628d;
+        border-radius: 9px;
+        font-weight: 600;
+    }
+
+    div.stDownloadButton > button:hover {
+        background: #294b78;
+        color: white;
+        border-color: #5b83b5;
+    }
+
+    [data-testid="stFileUploader"] {
+        background: #141f35;
+        border: 1px dashed #42628d;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    [data-testid="stMetric"] {
+        background: #141f35;
+        border: 1px solid #293954;
+        border-radius: 12px;
+        padding: 15px;
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #9aabc7;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #ffffff;
+    }
+
+    hr {
+        border-color: #293954;
+    }
+
+    .sidebar-brand {
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        padding: 10px 0 2px 0;
+    }
+
+    .sidebar-sub {
+        font-size: 11px;
+        color: #91a4c4;
+        letter-spacing: 1px;
+        margin-bottom: 25px;
+    }
+
+    .footer {
+        color: #7183a2;
+        font-size: 12px;
+        text-align: center;
+        padding-top: 25px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
+# =========================================================
+# LOAD MODEL AND FILES
+# =========================================================
 
 @st.cache_resource
 def load_model():
@@ -52,33 +267,35 @@ try:
     metrics = load_metrics()
 
 except Exception as e:
-    st.error(f"Error loading project files: {e}")
+    st.error(f"Unable to load project files: {e}")
     st.info(
-        "Please check that fraud_model.pkl and "
-        "demo_transactions.csv exist inside the artifacts folder."
+        "Check that fraud_model.pkl, demo_transactions.csv "
+        "and metrics.json are present in the artifacts folder."
     )
     st.stop()
 
 
-# ---------------- HELPER FUNCTIONS ----------------
+# =========================================================
+# HELPER FUNCTIONS
+# =========================================================
+
+def metric_card(label, value, note=""):
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">{label}</div>
+            <div class="metric-value">{value}</div>
+            <div class="metric-note">{note}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
 def get_predictions(data):
     predictions = model.predict(data)
     probabilities = model.predict_proba(data)[:, 1]
-
     return predictions, probabilities
-
-
-def show_prediction(prediction, probability):
-    if prediction == 1:
-        st.error("🚨 Fraudulent Transaction Detected")
-    else:
-        st.success("✅ Legitimate Transaction")
-
-    st.metric(
-        "Fraud Probability",
-        f"{probability * 100:.2f}%"
-    )
 
 
 def validate_csv(uploaded_file):
@@ -88,31 +305,25 @@ def validate_csv(uploaded_file):
         if data.empty:
             return None, "The uploaded CSV file is empty."
 
-        # Allow an optional actual Class column
+        # Optional actual label column
         if "Class" in data.columns:
             data = data.drop(columns=["Class"])
 
-        missing_columns = [
+        missing = [
             col for col in FEATURE_COLUMNS
             if col not in data.columns
         ]
 
-        extra_columns = [
+        extra = [
             col for col in data.columns
             if col not in FEATURE_COLUMNS
         ]
 
-        if missing_columns:
-            return None, (
-                "Missing required columns: "
-                + ", ".join(missing_columns)
-            )
+        if missing:
+            return None, "Missing columns: " + ", ".join(missing)
 
-        if extra_columns:
-            return None, (
-                "Unexpected columns found: "
-                + ", ".join(extra_columns)
-            )
+        if extra:
+            return None, "Unexpected columns: " + ", ".join(extra)
 
         data = data[FEATURE_COLUMNS].copy()
 
@@ -123,15 +334,10 @@ def validate_csv(uploaded_file):
             )
 
         if data.isnull().values.any():
-            return None, (
-                "CSV contains empty or non-numeric values. "
-                "Please correct them."
-            )
+            return None, "CSV contains empty or non-numeric values."
 
         if not np.isfinite(data.to_numpy()).all():
-            return None, (
-                "CSV contains infinite or invalid numeric values."
-            )
+            return None, "CSV contains invalid or infinite values."
 
         return data, None
 
@@ -139,115 +345,282 @@ def validate_csv(uploaded_file):
         return None, f"Unable to read CSV: {e}"
 
 
-# ---------------- HEADER ----------------
+def show_prediction(prediction, probability):
+    if prediction == 1:
+        st.markdown(
+            '<div class="status-fraud">⚠️ FRAUDULENT TRANSACTION DETECTED</div>',
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            '<div class="status-safe">✓ TRANSACTION CLASSIFIED AS LEGITIMATE</div>',
+            unsafe_allow_html=True
+        )
 
-st.title("💳 Credit Card Fraud Detection System")
+    st.write("")
+    st.metric(
+        "Fraud Probability",
+        f"{probability * 100:.2f}%"
+    )
+
+
+# =========================================================
+# SIDEBAR NAVIGATION
+# =========================================================
+
+with st.sidebar:
+
+    st.markdown(
+        '<div class="sidebar-brand">🛡️ FraudGuard</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        '<div class="sidebar-sub">INTELLIGENT FRAUD MONITORING</div>',
+        unsafe_allow_html=True
+    )
+
+    st.divider()
+
+    page = st.radio(
+        "NAVIGATION",
+        [
+            "🏠 Dashboard",
+            "🔍 Transaction Detection",
+            "📂 Batch Analysis",
+            "📊 Model Performance"
+        ],
+        label_visibility="visible"
+    )
+
+    st.divider()
+
+    st.markdown("**MODEL STATUS**")
+    st.markdown(
+        '<div class="status-safe">● Model Loaded</div>',
+        unsafe_allow_html=True
+    )
+
+    st.write("")
+    st.caption("Algorithm: Logistic Regression")
+    st.caption("Deployment: Streamlit Cloud")
+
+    st.divider()
+    st.caption("Academic MLOps Prototype")
+
+
+# =========================================================
+# COMMON HEADER
+# =========================================================
 
 st.markdown(
     """
-    An ML-powered platform to identify suspicious credit card
-    transactions using Logistic Regression.
-    
-    Upload your transaction dataset, analyze fraud predictions,
-    and download the results.
-    """
+    <div class="hero">
+        <div class="hero-label">Intelligent Transaction Security</div>
+        <h1>Credit Card Fraud Detection</h1>
+        <p>Monitor transactions, identify suspicious activity
+        and analyze fraud predictions with machine learning.</p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
-st.divider()
 
-# ---------------- TABS ----------------
+# =========================================================
+# DASHBOARD PAGE
+# =========================================================
 
-tab1, tab2, tab3 = st.tabs([
-    "🔍 Transaction Detection",
-    "📂 Batch Prediction",
-    "📊 Model Performance"
-])
+if page == "🏠 Dashboard":
+
+    st.markdown(
+        '<div class="section-title">Overview Dashboard</div>',
+        unsafe_allow_html=True
+    )
+
+    demo_features = demo[FEATURE_COLUMNS]
+    demo_predictions, demo_probabilities = get_predictions(
+        demo_features
+    )
+
+    total_demo = len(demo)
+    fraud_demo = int(np.sum(demo_predictions == 1))
+    legitimate_demo = int(np.sum(demo_predictions == 0))
+    fraud_rate = (
+        fraud_demo / total_demo * 100
+        if total_demo else 0
+    )
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    with c1:
+        metric_card("DEMO TRANSACTIONS", f"{total_demo:,}", "Sample test records")
+
+    with c2:
+        metric_card("FRAUD DETECTED", f"{fraud_demo:,}", "Model predictions")
+
+    with c3:
+        metric_card("LEGITIMATE", f"{legitimate_demo:,}", "Model predictions")
+
+    with c4:
+        metric_card("DEMO FRAUD RATE", f"{fraud_rate:.2f}%", "Predicted fraud share")
+
+    st.markdown(
+        '<div class="section-title">Transaction Distribution</div>',
+        unsafe_allow_html=True
+    )
+
+    chart_data = pd.DataFrame({
+        "Transaction Type": ["Fraud", "Legitimate"],
+        "Count": [fraud_demo, legitimate_demo]
+    })
+
+    st.bar_chart(
+        chart_data.set_index("Transaction Type"),
+        width="stretch"
+    )
+
+    st.markdown(
+        '<div class="section-title">Model Snapshot</div>',
+        unsafe_allow_html=True
+    )
+
+    m1, m2, m3 = st.columns(3)
+
+    m1.metric(
+        "Precision",
+        f"{float(metrics.get('precision', 0)) * 100:.2f}%"
+    )
+
+    m2.metric(
+        "Recall",
+        f"{float(metrics.get('recall', 0)) * 100:.2f}%"
+    )
+
+    m3.metric(
+        "F1 Score",
+        f"{float(metrics.get('f1', 0)) * 100:.2f}%"
+    )
+
+    st.info(
+        "Demo statistics are predictions on the sample transactions. "
+        "They are not confirmed real-world fraud cases."
+    )
 
 
-# ====================================================
-# TAB 1: TRANSACTION DETECTION
-# ====================================================
+# =========================================================
+# SINGLE TRANSACTION DETECTION
+# =========================================================
 
-with tab1:
+elif page == "🔍 Transaction Detection":
 
-    st.subheader("Single Transaction Detection")
+    st.markdown(
+        '<div class="section-title">Single Transaction Analysis</div>',
+        unsafe_allow_html=True
+    )
 
-    st.write(
-        "Select a sample transaction from the test dataset "
-        "to check whether it is fraudulent or legitimate."
+    st.markdown(
+        '<div class="muted">Select a historical sample transaction '
+        'to check its predicted fraud risk.</div>',
+        unsafe_allow_html=True
     )
 
     transaction_index = st.selectbox(
-        "Select Transaction",
+        "Select Transaction ID",
         options=list(range(len(demo))),
-        format_func=lambda x: f"Transaction {x + 1}"
+        format_func=lambda x: f"Transaction {x}"
     )
 
-    selected_transaction = demo.iloc[[transaction_index]]
+    selected = demo.iloc[[transaction_index]]
+    input_data = selected[FEATURE_COLUMNS]
 
-    input_data = selected_transaction[FEATURE_COLUMNS]
+    amount = float(selected["Amount"].iloc[0])
 
-    with st.expander("View Transaction Details"):
-        st.dataframe(
-            input_data,
-            width="stretch"
+    a, b = st.columns(2)
+
+    with a:
+        st.markdown(
+            f"""
+            <div class="info-card">
+                <div class="muted">TRANSACTION ID</div>
+                <h2>{transaction_index}</h2>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
+    with b:
+        st.markdown(
+            f"""
+            <div class="info-card">
+                <div class="muted">TRANSACTION AMOUNT</div>
+                <h2>{amount:.2f}</h2>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with st.expander("View Transaction Features"):
+        st.dataframe(input_data, width="stretch")
+
     if st.button(
-        "Analyze Transaction",
-        type="primary",
+        "🔍 Analyze Transaction",
         key="single_prediction"
     ):
 
-        prediction, probability = get_predictions(input_data)
+        predictions, probabilities = get_predictions(input_data)
 
-        st.subheader("Prediction Result")
+        prediction = int(predictions[0])
+        probability = float(probabilities[0])
 
-        show_prediction(
-            int(prediction[0]),
-            float(probability[0])
+        st.markdown(
+            '<div class="section-title">Analysis Result</div>',
+            unsafe_allow_html=True
         )
 
-        if "Class" in selected_transaction.columns:
+        show_prediction(prediction, probability)
 
-            actual = int(
-                selected_transaction["Class"].iloc[0]
+        if "Class" in selected.columns:
+            actual = int(selected["Class"].iloc[0])
+
+            st.info(
+                "Actual dataset label: "
+                + ("Fraud" if actual == 1 else "Legitimate")
             )
 
-            st.write(
-                "**Actual Dataset Label:**",
-                "Fraud" if actual == 1 else "Legitimate"
-            )
+    st.caption(
+        "This is an offline demonstration using historical test "
+        "transactions, not a live bank connection."
+    )
 
 
-# ====================================================
-# TAB 2: BATCH PREDICTION
-# ====================================================
+# =========================================================
+# BATCH ANALYSIS
+# =========================================================
 
-with tab2:
+elif page == "📂 Batch Analysis":
 
-    st.subheader("Upload Your Own Transaction Dataset")
+    st.markdown(
+        '<div class="section-title">Batch Transaction Analysis</div>',
+        unsafe_allow_html=True
+    )
 
     st.write(
-        "Upload a CSV containing the required transaction "
-        "features. The existing trained model will analyze "
-        "your uploaded transactions."
+        "Upload a CSV file containing transaction features. "
+        "The existing trained model will analyze the uploaded data."
     )
 
     st.info(
         "Required columns: Time, V1 to V28, Amount. "
-        "The Class column is optional. This model uses the "
-        "anonymized features of the Credit Card Fraud dataset."
+        "Class is optional. This model requires the anonymized "
+        "features used by the Credit Card Fraud dataset."
     )
-
-    # Download sample CSV
 
     sample_csv = demo[FEATURE_COLUMNS].head(10).to_csv(
         index=False
     ).encode("utf-8")
 
     st.download_button(
-        label="⬇️ Download Sample CSV",
+        "⬇️ Download Sample CSV",
         data=sample_csv,
         file_name="sample_transactions.csv",
         mime="text/csv"
@@ -282,7 +655,6 @@ with tab2:
 
             if st.button(
                 "🚀 Analyze Transactions",
-                type="primary",
                 key="batch_prediction"
             ):
 
@@ -303,132 +675,108 @@ with tab2:
                         probabilities * 100
                     ).round(2)
 
-                    total_transactions = len(results)
-
-                    fraud_count = int(
-                        np.sum(predictions == 1)
-                    )
-
-                    legitimate_count = int(
-                        np.sum(predictions == 0)
-                    )
-
+                    total = len(results)
+                    fraud_count = int(np.sum(predictions == 1))
+                    legitimate_count = int(np.sum(predictions == 0))
                     fraud_percentage = (
-                        fraud_count / total_transactions
-                    ) * 100
-
-                    st.subheader("Analysis Summary")
-
-                    col1, col2, col3, col4 = st.columns(4)
-
-                    col1.metric(
-                        "Total Transactions",
-                        total_transactions
+                        fraud_count / total * 100 if total else 0
                     )
 
-                    col2.metric(
-                        "Fraud Detected",
-                        fraud_count
+                    st.markdown(
+                        '<div class="section-title">Analysis Summary</div>',
+                        unsafe_allow_html=True
                     )
 
-                    col3.metric(
-                        "Legitimate",
-                        legitimate_count
+                    c1, c2, c3, c4 = st.columns(4)
+
+                    with c1:
+                        metric_card("TOTAL TRANSACTIONS", f"{total:,}")
+
+                    with c2:
+                        metric_card("FRAUD DETECTED", f"{fraud_count:,}")
+
+                    with c3:
+                        metric_card("LEGITIMATE", f"{legitimate_count:,}")
+
+                    with c4:
+                        metric_card("FRAUD PERCENTAGE", f"{fraud_percentage:.2f}%")
+
+                    st.markdown(
+                        '<div class="section-title">Transaction Distribution</div>',
+                        unsafe_allow_html=True
                     )
 
-                    col4.metric(
-                        "Fraud Percentage",
-                        f"{fraud_percentage:.2f}%"
-                    )
-
-                    st.divider()
-
-                    st.subheader("Transaction Distribution")
-
-                    chart_data = pd.DataFrame({
-                        "Transaction Type": [
-                            "Fraud",
-                            "Legitimate"
-                        ],
-                        "Count": [
-                            fraud_count,
-                            legitimate_count
-                        ]
+                    distribution = pd.DataFrame({
+                        "Transaction Type": ["Fraud", "Legitimate"],
+                        "Count": [fraud_count, legitimate_count]
                     })
 
                     st.bar_chart(
-                        chart_data.set_index("Transaction Type"),
+                        distribution.set_index("Transaction Type"),
                         width="stretch"
                     )
 
-                    st.divider()
-
-                    st.subheader("Prediction Results")
+                    st.markdown(
+                        '<div class="section-title">Prediction Results</div>',
+                        unsafe_allow_html=True
+                    )
 
                     st.dataframe(
                         results,
-                        width="stretch"
+                        width="stretch",
+                        height=400
                     )
-
-                    # Download prediction report
 
                     output_csv = results.to_csv(
                         index=False
                     ).encode("utf-8")
 
                     st.download_button(
-                        label="⬇️ Download Prediction Report",
+                        "⬇️ Download Prediction Report",
                         data=output_csv,
                         file_name="fraud_detection_results.csv",
                         mime="text/csv"
                     )
 
+                    st.caption(
+                        "Fraud labels are model predictions, "
+                        "not confirmed fraud findings."
+                    )
 
-# ====================================================
-# TAB 3: MODEL PERFORMANCE
-# ====================================================
 
-with tab3:
+# =========================================================
+# MODEL PERFORMANCE
+# =========================================================
 
-    st.subheader("Model Performance Dashboard")
+elif page == "📊 Model Performance":
 
-    st.write(
-        "Performance metrics of the trained "
-        "Credit Card Fraud Detection model."
+    st.markdown(
+        '<div class="section-title">Model Evaluation</div>',
+        unsafe_allow_html=True
     )
 
     if metrics:
 
-        metric_columns = st.columns(4)
+        precision = float(metrics.get("precision", 0))
+        recall = float(metrics.get("recall", 0))
+        f1 = float(metrics.get("f1", 0))
+        pr_auc = float(metrics.get("pr_auc", 0))
 
-        preferred_metrics = [
-            ("Precision", "precision"),
-            ("Recall", "recall"),
-            ("F1 Score", "f1"),
-            ("PR-AUC", "pr_auc")
-        ]
+        c1, c2, c3, c4 = st.columns(4)
 
-        for column, (label, key) in zip(
-            metric_columns,
-            preferred_metrics
-        ):
-
-            value = metrics.get(key)
-
-            if value is not None:
-                column.metric(
-                    label,
-                    f"{float(value):.4f}"
-                )
-
-        # Confusion matrix if available
+        c1.metric("Precision", f"{precision * 100:.2f}%")
+        c2.metric("Recall", f"{recall * 100:.2f}%")
+        c3.metric("F1 Score", f"{f1 * 100:.2f}%")
+        c4.metric("PR-AUC", f"{pr_auc:.4f}")
 
         confusion_matrix = metrics.get("confusion_matrix")
 
         if confusion_matrix is not None:
 
-            st.divider()
-            st.subheader("Confusion Matrix")
+            st.markdown(
+                '<div class="section-title">Confusion Matrix</div>',
+                unsafe_allow_html=True
+            )
 
             if (
                 isinstance(confusion_matrix, list)
@@ -452,43 +800,48 @@ with tab3:
                     width="stretch"
                 )
 
-        with st.expander("View Complete Metrics"):
+        with st.expander("View Complete Model Metrics"):
             st.json(metrics)
 
     else:
-
         st.warning(
-            "Model metrics file was not found or is empty."
+            "Metrics file not found or contains no metrics."
         )
 
-    st.divider()
-
-    st.subheader("About the Model")
-
     st.markdown(
-        """
-        - **Algorithm:** Logistic Regression
-        - **Dataset:** Credit Card Fraud Detection Dataset
-        - **Preprocessing:** StandardScaler
-        - **Class Imbalance Handling:** Balanced Class Weights
-        - **Model Storage:** Joblib
-        - **Deployment:** Streamlit Community Cloud
-        """
+        '<div class="section-title">Model Information</div>',
+        unsafe_allow_html=True
     )
 
-    st.caption(
-        "Note: This is an academic prototype. "
-        "It predicts uploaded transaction data using an existing "
-        "trained model. It does not connect to live banking systems "
-        "or automatically retrain the model."
+    st.markdown("""
+    <div class="info-card">
+        <b>Algorithm:</b> Logistic Regression<br><br>
+        <b>Preprocessing:</b> StandardScaler<br><br>
+        <b>Class Imbalance:</b> Balanced Class Weights<br><br>
+        <b>Model Storage:</b> Joblib<br><br>
+        <b>Deployment:</b> Streamlit Community Cloud
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.warning(
+        "The model has high recall but low precision. "
+        "It can detect many fraud cases but may also flag "
+        "legitimate transactions as suspicious."
     )
 
 
-# ---------------- FOOTER ----------------
+# =========================================================
+# FOOTER
+# =========================================================
 
-st.divider()
-
-st.caption(
-    "Credit Card Fraud Detection System | "
-    "Python • Scikit-learn • Streamlit"
+st.markdown(
+    """
+    <div class="footer">
+        FraudGuard • Credit Card Fraud Detection<br>
+        Python · Scikit-learn · Streamlit
+        <br><br>
+        Academic prototype — not connected to live banking systems.
+    </div>
+    """,
+    unsafe_allow_html=True
 )
