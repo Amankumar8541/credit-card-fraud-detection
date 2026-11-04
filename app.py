@@ -6,9 +6,9 @@ import joblib
 import json
 from pathlib import Path
 
-# =========================================================
-# PAGE CONFIG
-# =========================================================
+# =====================================================
+# PAGE CONFIGURATION
+# =====================================================
 
 st.set_page_config(
     page_title="FraudGuard | Credit Card Security",
@@ -29,219 +29,219 @@ FEATURE_COLUMNS = [
     "Amount"
 ]
 
-# =========================================================
-# CUSTOM DARK FINTECH CSS
-# =========================================================
+# =====================================================
+# DARK FINTECH DESIGN
+# =====================================================
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'DM Sans', sans-serif;
-    }
+html, body, [class*="css"] {
+    font-family: 'DM Sans', sans-serif;
+}
 
-    .stApp {
-        background: #0b1020;
-        color: #e8edf7;
-    }
+.stApp {
+    background: #0b1020;
+    color: #e8edf7;
+}
 
-    [data-testid="stHeader"] {
-        background: rgba(11, 16, 32, 0.9);
-    }
+[data-testid="stHeader"] {
+    background: rgba(11, 16, 32, 0.9);
+}
 
-    [data-testid="stSidebar"] {
-        background: #10182b;
-        border-right: 1px solid #26334d;
-    }
+[data-testid="stSidebar"] {
+    background: #10182b;
+    border-right: 1px solid #26334d;
+}
 
-    [data-testid="stSidebar"] * {
-        color: #e8edf7;
-    }
+[data-testid="stSidebar"] * {
+    color: #e8edf7;
+}
 
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 3rem;
-        max-width: 1500px;
-    }
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    max-width: 1500px;
+}
 
-    .hero {
-        background: linear-gradient(120deg, #172641, #111a30);
-        border: 1px solid #293b5d;
-        border-radius: 18px;
-        padding: 26px 30px;
-        margin-bottom: 24px;
-    }
+.hero {
+    background: linear-gradient(120deg, #172641, #111a30);
+    border: 1px solid #293b5d;
+    border-radius: 18px;
+    padding: 26px 30px;
+    margin-bottom: 24px;
+}
 
-    .hero-label {
-        color: #9db4d9;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
+.hero-label {
+    color: #9db4d9;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
 
-    .hero h1 {
-        color: #ffffff;
-        font-size: 30px;
-        font-weight: 800;
-        margin: 8px 0;
-    }
+.hero h1 {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 800;
+    margin: 8px 0;
+}
 
-    .hero p {
-        color: #aab9d2;
-        margin: 0;
-        font-size: 14px;
-    }
+.hero p {
+    color: #aab9d2;
+    margin: 0;
+    font-size: 14px;
+}
 
-    .section-title {
-        font-size: 21px;
-        font-weight: 700;
-        color: #f1f5ff;
-        margin: 20px 0 14px 0;
-    }
+.section-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #f1f5ff;
+    margin: 20px 0 14px 0;
+}
 
-    .metric-card {
-        background: #141f35;
-        border: 1px solid #293954;
-        border-radius: 15px;
-        padding: 19px;
-        min-height: 118px;
-    }
+.metric-card {
+    background: #141f35;
+    border: 1px solid #293954;
+    border-radius: 15px;
+    padding: 19px;
+    min-height: 118px;
+}
 
-    .metric-label {
-        color: #9aabc7;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
+.metric-label {
+    color: #9aabc7;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
 
-    .metric-value {
-        color: #f5f7ff;
-        font-size: 28px;
-        font-weight: 800;
-    }
+.metric-value {
+    color: #f5f7ff;
+    font-size: 28px;
+    font-weight: 800;
+}
 
-    .metric-note {
-        color: #8093b2;
-        font-size: 11px;
-        margin-top: 5px;
-    }
+.metric-note {
+    color: #8093b2;
+    font-size: 11px;
+    margin-top: 5px;
+}
 
-    .status-fraud {
-        background: #351b2a;
-        border: 1px solid #87364f;
-        color: #ff718b;
-        padding: 14px 17px;
-        border-radius: 12px;
-        font-weight: 700;
-    }
+.status-fraud {
+    background: #351b2a;
+    border: 1px solid #87364f;
+    color: #ff718b;
+    padding: 14px 17px;
+    border-radius: 12px;
+    font-weight: 700;
+}
 
-    .status-safe {
-        background: #123329;
-        border: 1px solid #24684f;
-        color: #61dfa7;
-        padding: 14px 17px;
-        border-radius: 12px;
-        font-weight: 700;
-    }
+.status-safe {
+    background: #123329;
+    border: 1px solid #24684f;
+    color: #61dfa7;
+    padding: 14px 17px;
+    border-radius: 12px;
+    font-weight: 700;
+}
 
-    .info-card {
-        background: #141f35;
-        border: 1px solid #293954;
-        border-radius: 14px;
-        padding: 18px;
-        margin-bottom: 12px;
-    }
+.info-card {
+    background: #141f35;
+    border: 1px solid #293954;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+}
 
-    .muted {
-        color: #9aabc7;
-        font-size: 13px;
-    }
+.muted {
+    color: #9aabc7;
+    font-size: 13px;
+}
 
-    div.stButton > button {
-        background: #e84b62;
-        color: white;
-        border: none;
-        border-radius: 9px;
-        padding: 10px 20px;
-        font-weight: 700;
-        min-height: 43px;
-    }
+div.stButton > button {
+    background: #e84b62;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 20px;
+    font-weight: 700;
+    min-height: 43px;
+}
 
-    div.stButton > button:hover {
-        background: #ff6378;
-        color: white;
-        border: none;
-    }
+div.stButton > button:hover {
+    background: #ff6378;
+    color: white;
+    border: none;
+}
 
-    div.stDownloadButton > button {
-        background: #1d3557;
-        color: white;
-        border: 1px solid #42628d;
-        border-radius: 9px;
-        font-weight: 600;
-    }
+div.stDownloadButton > button {
+    background: #1d3557;
+    color: white;
+    border: 1px solid #42628d;
+    border-radius: 9px;
+    font-weight: 600;
+}
 
-    div.stDownloadButton > button:hover {
-        background: #294b78;
-        color: white;
-        border-color: #5b83b5;
-    }
+div.stDownloadButton > button:hover {
+    background: #294b78;
+    color: white;
+    border-color: #5b83b5;
+}
 
-    [data-testid="stFileUploader"] {
-        background: #141f35;
-        border: 1px dashed #42628d;
-        border-radius: 12px;
-        padding: 12px;
-    }
+[data-testid="stFileUploader"] {
+    background: #141f35;
+    border: 1px dashed #42628d;
+    border-radius: 12px;
+    padding: 12px;
+}
 
-    [data-testid="stMetric"] {
-        background: #141f35;
-        border: 1px solid #293954;
-        border-radius: 12px;
-        padding: 15px;
-    }
+[data-testid="stMetric"] {
+    background: #141f35;
+    border: 1px solid #293954;
+    border-radius: 12px;
+    padding: 15px;
+}
 
-    [data-testid="stMetricLabel"] {
-        color: #9aabc7;
-    }
+[data-testid="stMetricLabel"] {
+    color: #9aabc7;
+}
 
-    [data-testid="stMetricValue"] {
-        color: #ffffff;
-    }
+[data-testid="stMetricValue"] {
+    color: #ffffff;
+}
 
-    hr {
-        border-color: #293954;
-    }
+hr {
+    border-color: #293954;
+}
 
-    .sidebar-brand {
-        font-size: 22px;
-        font-weight: 800;
-        color: #ffffff;
-        padding: 10px 0 2px 0;
-    }
+.sidebar-brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    padding: 10px 0 2px 0;
+}
 
-    .sidebar-sub {
-        font-size: 11px;
-        color: #91a4c4;
-        letter-spacing: 1px;
-        margin-bottom: 25px;
-    }
+.sidebar-sub {
+    font-size: 11px;
+    color: #91a4c4;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
 
-    .footer {
-        color: #7183a2;
-        font-size: 12px;
-        text-align: center;
-        padding-top: 25px;
-    }
+.footer {
+    color: #7183a2;
+    font-size: 12px;
+    text-align: center;
+    padding-top: 25px;
+}
 </style>
 """, unsafe_allow_html=True)
 
 
-# =========================================================
+# =====================================================
 # LOAD MODEL AND FILES
-# =========================================================
+# =====================================================
 
 @st.cache_resource
 def load_model():
@@ -270,14 +270,14 @@ except Exception as e:
     st.error(f"Unable to load project files: {e}")
     st.info(
         "Check that fraud_model.pkl, demo_transactions.csv "
-        "and metrics.json are present in the artifacts folder."
+        "and metrics.json exist inside the artifacts folder."
     )
     st.stop()
 
 
-# =========================================================
+# =====================================================
 # HELPER FUNCTIONS
-# =========================================================
+# =====================================================
 
 def metric_card(label, value, note=""):
     st.markdown(
@@ -305,7 +305,7 @@ def validate_csv(uploaded_file):
         if data.empty:
             return None, "The uploaded CSV file is empty."
 
-        # Optional actual label column
+        # Class column is optional and not used for prediction
         if "Class" in data.columns:
             data = data.drop(columns=["Class"])
 
@@ -364,9 +364,9 @@ def show_prediction(prediction, probability):
     )
 
 
-# =========================================================
+# =====================================================
 # SIDEBAR NAVIGATION
-# =========================================================
+# =====================================================
 
 with st.sidebar:
 
@@ -396,6 +396,7 @@ with st.sidebar:
     st.divider()
 
     st.markdown("**MODEL STATUS**")
+
     st.markdown(
         '<div class="status-safe">● Model Loaded</div>',
         unsafe_allow_html=True
@@ -409,9 +410,9 @@ with st.sidebar:
     st.caption("Academic MLOps Prototype")
 
 
-# =========================================================
+# =====================================================
 # COMMON HEADER
-# =========================================================
+# =====================================================
 
 st.markdown(
     """
@@ -426,9 +427,9 @@ st.markdown(
 )
 
 
-# =========================================================
+# =====================================================
 # DASHBOARD PAGE
-# =========================================================
+# =====================================================
 
 if page == "🏠 Dashboard":
 
@@ -438,6 +439,7 @@ if page == "🏠 Dashboard":
     )
 
     demo_features = demo[FEATURE_COLUMNS]
+
     demo_predictions, demo_probabilities = get_predictions(
         demo_features
     )
@@ -445,6 +447,7 @@ if page == "🏠 Dashboard":
     total_demo = len(demo)
     fraud_demo = int(np.sum(demo_predictions == 1))
     legitimate_demo = int(np.sum(demo_predictions == 0))
+
     fraud_rate = (
         fraud_demo / total_demo * 100
         if total_demo else 0
@@ -453,16 +456,32 @@ if page == "🏠 Dashboard":
     c1, c2, c3, c4 = st.columns(4)
 
     with c1:
-        metric_card("DEMO TRANSACTIONS", f"{total_demo:,}", "Sample test records")
+        metric_card(
+            "DEMO TRANSACTIONS",
+            f"{total_demo:,}",
+            "Sample test records"
+        )
 
     with c2:
-        metric_card("FRAUD DETECTED", f"{fraud_demo:,}", "Model predictions")
+        metric_card(
+            "FRAUD DETECTED",
+            f"{fraud_demo:,}",
+            "Model predictions"
+        )
 
     with c3:
-        metric_card("LEGITIMATE", f"{legitimate_demo:,}", "Model predictions")
+        metric_card(
+            "LEGITIMATE",
+            f"{legitimate_demo:,}",
+            "Model predictions"
+        )
 
     with c4:
-        metric_card("DEMO FRAUD RATE", f"{fraud_rate:.2f}%", "Predicted fraud share")
+        metric_card(
+            "DEMO FRAUD RATE",
+            f"{fraud_rate:.2f}%",
+            "Predicted fraud share"
+        )
 
     st.markdown(
         '<div class="section-title">Transaction Distribution</div>',
@@ -498,7 +517,7 @@ if page == "🏠 Dashboard":
 
     m3.metric(
         "F1 Score",
-        f"{float(metrics.get('f1', 0)) * 100:.2f}%"
+        f"{float(metrics.get('f1_score', 0)) * 100:.2f}%"
     )
 
     st.info(
@@ -507,9 +526,9 @@ if page == "🏠 Dashboard":
     )
 
 
-# =========================================================
+# =====================================================
 # SINGLE TRANSACTION DETECTION
-# =========================================================
+# =====================================================
 
 elif page == "🔍 Transaction Detection":
 
@@ -593,9 +612,9 @@ elif page == "🔍 Transaction Detection":
     )
 
 
-# =========================================================
+# =====================================================
 # BATCH ANALYSIS
-# =========================================================
+# =====================================================
 
 elif page == "📂 Batch Analysis":
 
@@ -676,10 +695,18 @@ elif page == "📂 Batch Analysis":
                     ).round(2)
 
                     total = len(results)
-                    fraud_count = int(np.sum(predictions == 1))
-                    legitimate_count = int(np.sum(predictions == 0))
+
+                    fraud_count = int(
+                        np.sum(predictions == 1)
+                    )
+
+                    legitimate_count = int(
+                        np.sum(predictions == 0)
+                    )
+
                     fraud_percentage = (
-                        fraud_count / total * 100 if total else 0
+                        fraud_count / total * 100
+                        if total else 0
                     )
 
                     st.markdown(
@@ -690,16 +717,28 @@ elif page == "📂 Batch Analysis":
                     c1, c2, c3, c4 = st.columns(4)
 
                     with c1:
-                        metric_card("TOTAL TRANSACTIONS", f"{total:,}")
+                        metric_card(
+                            "TOTAL TRANSACTIONS",
+                            f"{total:,}"
+                        )
 
                     with c2:
-                        metric_card("FRAUD DETECTED", f"{fraud_count:,}")
+                        metric_card(
+                            "FRAUD DETECTED",
+                            f"{fraud_count:,}"
+                        )
 
                     with c3:
-                        metric_card("LEGITIMATE", f"{legitimate_count:,}")
+                        metric_card(
+                            "LEGITIMATE",
+                            f"{legitimate_count:,}"
+                        )
 
                     with c4:
-                        metric_card("FRAUD PERCENTAGE", f"{fraud_percentage:.2f}%")
+                        metric_card(
+                            "FRAUD PERCENTAGE",
+                            f"{fraud_percentage:.2f}%"
+                        )
 
                     st.markdown(
                         '<div class="section-title">Transaction Distribution</div>',
@@ -707,8 +746,14 @@ elif page == "📂 Batch Analysis":
                     )
 
                     distribution = pd.DataFrame({
-                        "Transaction Type": ["Fraud", "Legitimate"],
-                        "Count": [fraud_count, legitimate_count]
+                        "Transaction Type": [
+                            "Fraud",
+                            "Legitimate"
+                        ],
+                        "Count": [
+                            fraud_count,
+                            legitimate_count
+                        ]
                     })
 
                     st.bar_chart(
@@ -744,9 +789,9 @@ elif page == "📂 Batch Analysis":
                     )
 
 
-# =========================================================
+# =====================================================
 # MODEL PERFORMANCE
-# =========================================================
+# =====================================================
 
 elif page == "📊 Model Performance":
 
@@ -759,15 +804,33 @@ elif page == "📊 Model Performance":
 
         precision = float(metrics.get("precision", 0))
         recall = float(metrics.get("recall", 0))
-        f1 = float(metrics.get("f1", 0))
+
+        # Correct key: metrics.json stores f1_score
+        f1 = float(metrics.get("f1_score", 0))
+
         pr_auc = float(metrics.get("pr_auc", 0))
 
         c1, c2, c3, c4 = st.columns(4)
 
-        c1.metric("Precision", f"{precision * 100:.2f}%")
-        c2.metric("Recall", f"{recall * 100:.2f}%")
-        c3.metric("F1 Score", f"{f1 * 100:.2f}%")
-        c4.metric("PR-AUC", f"{pr_auc:.4f}")
+        c1.metric(
+            "Precision",
+            f"{precision * 100:.2f}%"
+        )
+
+        c2.metric(
+            "Recall",
+            f"{recall * 100:.2f}%"
+        )
+
+        c3.metric(
+            "F1 Score",
+            f"{f1 * 100:.2f}%"
+        )
+
+        c4.metric(
+            "PR-AUC",
+            f"{pr_auc:.4f}"
+        )
 
         confusion_matrix = metrics.get("confusion_matrix")
 
@@ -830,9 +893,9 @@ elif page == "📊 Model Performance":
     )
 
 
-# =========================================================
+# =====================================================
 # FOOTER
-# =========================================================
+# =====================================================
 
 st.markdown(
     """
