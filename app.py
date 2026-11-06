@@ -23,7 +23,10 @@ DEMO_PATH = BASE_DIR / "artifacts" / "demo_transactions.csv"
 
 # Local API default. For Streamlit Cloud, set FRAUDGUARD_API_URL
 # to your publicly deployed FastAPI service URL.
-API_URL = os.getenv("FRAUDGUARD_API_URL", "http://127.0.0.1:8002").rstrip("/")
+API_URL = st.secrets.get(
+    "FRAUDGUARD_API_URL",
+    os.getenv("FRAUDGUARD_API_URL", "http://127.0.0.1:8002")
+).rstrip("/")
 
 FEATURE_COLUMNS = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
 
